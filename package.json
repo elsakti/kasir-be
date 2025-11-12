@@ -1,0 +1,28 @@
+{
+  "name": "restaurant-api",
+  "version": "1.0.0",
+  "description": "Restaurant API with Hapi.js and PostgreSQL",
+  "main": "src/server.js",
+  "scripts": {
+    "start": "node src/server.js",
+    "dev": "nodemon src/server.js"
+  },
+  "keywords": [
+    "hapi",
+    "postgresql",
+    "api",
+    "restaurant"
+  ],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@hapi/hapi": "^21.3.2",
+    "@hapi/inert": "^7.1.0",
+    "dotenv": "^16.0.3",
+    "joi": "^17.9.2",
+    "pg": "^8.11.0"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.22"
+  }
+}
