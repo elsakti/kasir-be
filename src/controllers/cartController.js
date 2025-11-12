@@ -3,22 +3,34 @@ const pool = require("../config/database");
 const cartController = {
   getAllCartItems: async (request, h) => {
     try {
-      const result = await pool.query(`
-      SELECT cart.*,
-        json_build_object(
-          'id', products.id,
-          'code', products.code,
-          'name', products.name,
-          'price', products.price,
-          'is_available', products.is_available,
-          'image', products.image,
-          'category', json_build_object('id', categories.id, 'name', categories.name)
-        ) as product
-      FROM cart
-      JOIN products ON cart.product_id = products.id
-      LEFT JOIN categories ON products.category_id = categories.id
-      ORDER BY cart.created_at DESC
-    `);
+      const { product_id } = request.query;
+
+      let query = `
+        SELECT cart.*,
+          json_build_object(
+            'id', products.id,
+            'code', products.code,
+            'name', products.name,
+            'price', products.price,
+            'is_available', products.is_available,
+            'image', products.image,
+            'category', json_build_object('id', categories.id, 'name', categories.name)
+          ) as product
+        FROM cart
+        JOIN products ON cart.product_id = products.id
+        LEFT JOIN categories ON products.category_id = categories.id
+      `;
+
+      const params = [];
+
+      if (product_id) {
+        query += ` WHERE cart.product_id = $1`;
+        params.push(product_id);
+      }
+
+      query += ` ORDER BY cart.created_at DESC`;
+
+      const result = await pool.query(query, params);
 
       return h.response(result.rows).code(200);
     } catch (error) {
